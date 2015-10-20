@@ -2,6 +2,7 @@ package mattress
 
 import (
 	"bytes"
+	"encoding/json"
 	"github.com/giskook/gotcp"
 	"log"
 )
@@ -44,7 +45,9 @@ func (this *Callback) OnClose(c *gotcp.Conn) {
 
 func (this *Callback) OnMessage(c *gotcp.Conn, p gotcp.Packet) bool {
 	packet := p.(*ReportStatusPacket)
-	log.Println(packet)
+	res, _ := json.Marshal(packet)
 
+	GetMqttClient().Publish("hello", string(res))
+	log.Println(string(res))
 	return true
 }
